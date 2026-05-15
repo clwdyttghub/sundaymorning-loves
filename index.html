@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>sunday morning hehe</title>
+    <title></title>
     <style>
         :root {
             --bg-color: #fdfcf0;
@@ -37,7 +37,6 @@
             --text-color: #ffffff;
         }
 
-        /* FIXED: Added higher z-index and pointer-events */
         #start-button {
             padding: 12px 25px;
             font-size: 14px;
@@ -64,7 +63,7 @@
             height: 100%;
             position: relative;
             transition: opacity 1s ease-in-out;
-            pointer-events: none; /* Allows clicks to pass through to the button */
+            pointer-events: none;
         }
 
         .lyric-container {
@@ -183,10 +182,10 @@
         let currentLineContainers = {};
 
         startBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Stops any other elements from stealing the click
+            e.stopPropagation();
             audio.play().then(() => {
                 startBtn.style.display = 'none';
-                mainWrapper.style.pointerEvents = 'auto'; // Re-enable pointer events after start
+                mainWrapper.style.pointerEvents = 'auto';
                 playSequence();
             }).catch(err => console.log("Audio play failed:", err));
         });
