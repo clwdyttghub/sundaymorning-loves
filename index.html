@@ -37,19 +37,26 @@
             --text-color: #ffffff;
         }
 
+        /* FIXED: Added higher z-index and pointer-events */
         #start-button {
             padding: 12px 25px;
             font-size: 14px;
             cursor: pointer;
             background: #fff;
-            border: 1px solid #000;
+            border: 2px solid #000;
             border-radius: 5px;
-            z-index: 9999;
+            z-index: 10000; 
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        #start-button:hover {
+            background: #f0f0f0;
+            transform: translate(-52%, -52%);
         }
 
         #main-wrapper {
@@ -57,6 +64,7 @@
             height: 100%;
             position: relative;
             transition: opacity 1s ease-in-out;
+            pointer-events: none; /* Allows clicks to pass through to the button */
         }
 
         .lyric-container {
@@ -67,7 +75,6 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 100;
-            pointer-events: none;
         }
 
         .word {
@@ -109,22 +116,10 @@
             bottom: -350px;
         }
 
-        .floating-photo::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 30%;
-            width: 40px;
-            height: 20px;
-            background: rgba(255,255,255,0.3);
-            transform: rotate(-5deg);
-        }
-
         .floating-photo img {
             width: 100%;
             height: auto;
             display: block;
-            object-fit: contain; 
         }
 
         @keyframes wordAppear {
@@ -177,7 +172,7 @@
             { time: 24000, src: "sundaymorning-drawable8.jpeg", left: '52%' },
             { time: 30000, src: "sundaymorning-drawable9.jpeg", left: '20%' },
             { time: 36000, src: "sundaymorning-drawable10.jpeg", left: '55%' },
-            { time: 41000, src: "sundaymorning-drawable11.jpeg", left: '35%' }
+            { time: 40000, src: "sundaymorning-drawable11.jpeg", left: '35%' }
         ];
 
         const container = document.getElementById('container');
@@ -187,11 +182,13 @@
         const audio = document.getElementById('bg-music');
         let currentLineContainers = {};
 
-        startBtn.addEventListener('click', () => {
+        startBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Stops any other elements from stealing the click
             audio.play().then(() => {
                 startBtn.style.display = 'none';
+                mainWrapper.style.pointerEvents = 'auto'; // Re-enable pointer events after start
                 playSequence();
-            });
+            }).catch(err => console.log("Audio play failed:", err));
         });
 
         function getOrCreateLineContainer(lineNum) {
